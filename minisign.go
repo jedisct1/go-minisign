@@ -36,7 +36,7 @@ func NewPublicKey(publicKeyStr string) (PublicKey, error) {
 	return publicKey, nil
 }
 
-func decodePublicKey(in string) (PublicKey, error) {
+func DecodePublicKey(in string) (PublicKey, error) {
 	var publicKey PublicKey
 	lines := strings.SplitN(in, "\n", 2)
 	if len(lines) < 2 {
@@ -45,7 +45,7 @@ func decodePublicKey(in string) (PublicKey, error) {
 	return NewPublicKey(lines[1])
 }
 
-func decodeSignature(in string) (Signature, error) {
+func DecodeSignature(in string) (Signature, error) {
 	var signature Signature
 	lines := strings.SplitN(in, "\n", 4)
 	if len(lines) < 4 {
@@ -74,7 +74,7 @@ func NewPublicKeyFromFile(file string) (PublicKey, error) {
 	if err != nil {
 		return publicKey, err
 	}
-	return decodePublicKey(string(bin))
+	return DecodePublicKey(string(bin))
 }
 
 func NewSignatureFromFile(file string) (Signature, error) {
@@ -83,7 +83,7 @@ func NewSignatureFromFile(file string) (Signature, error) {
 	if err != nil {
 		return signature, err
 	}
-	return decodeSignature(string(bin))
+	return DecodeSignature(string(bin))
 }
 
 func (publicKey *PublicKey) Verify(bin []byte, signature Signature) (bool, error) {
