@@ -1,2 +1,4 @@
 # go-minisign
-Minisign library for Golang
+
+A Golang library to verify [Minisign](https://jedisct1.github.io/minisign/) signatures.
+
