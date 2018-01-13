@@ -24,13 +24,9 @@ type Signature struct {
 	GlobalSignature    [64]byte
 }
 
-func DecodePublicKey(in string) (PublicKey, error) {
+func NewPublicKey(publicKeyStr string) (PublicKey, error) {
 	var publicKey PublicKey
-	lines := strings.SplitN(in, "\n", 2)
-	if len(lines) < 2 {
-		return publicKey, errors.New("Incomplete encoded public key")
-	}
-	bin, err := base64.StdEncoding.DecodeString(lines[1])
+	bin, err := base64.StdEncoding.DecodeString(publicKeyStr)
 	if err != nil || len(bin) != 42 {
 		return publicKey, errors.New("Invalid encoded public key")
 	}
@@ -40,7 +36,16 @@ func DecodePublicKey(in string) (PublicKey, error) {
 	return publicKey, nil
 }
 
-func DecodeSignature(in string) (Signature, error) {
+func decodePublicKey(in string) (PublicKey, error) {
+	var publicKey PublicKey
+	lines := strings.SplitN(in, "\n", 2)
+	if len(lines) < 2 {
+		return publicKey, errors.New("Incomplete encoded public key")
+	}
+	return NewPublicKey(lines[1])
+}
+
+func decodeSignature(in string) (Signature, error) {
 	var signature Signature
 	lines := strings.SplitN(in, "\n", 4)
 	if len(lines) < 4 {
@@ -69,7 +74,7 @@ func NewPublicKeyFromFile(file string) (PublicKey, error) {
 	if err != nil {
 		return publicKey, err
 	}
-	return DecodePublicKey(string(bin))
+	return decodePublicKey(string(bin))
 }
 
 func NewSignatureFromFile(file string) (Signature, error) {
@@ -78,7 +83,7 @@ func NewSignatureFromFile(file string) (Signature, error) {
 	if err != nil {
 		return signature, err
 	}
-	return DecodeSignature(string(bin))
+	return decodeSignature(string(bin))
 }
 
 func (publicKey *PublicKey) Verify(bin []byte, signature Signature) (bool, error) {
