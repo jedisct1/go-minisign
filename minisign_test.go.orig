@@ -1,5 +1,6 @@
 package minisign
 
+<<<<<<< HEAD
 import "testing"
 
 func TestLegacy(t *testing.T) {
@@ -37,8 +38,10 @@ func TestPrehashed(t *testing.T) {
 	}
 	if !v {
 		t.Fatal("signature verification failed")
-	}
-}
+=======
+import (
+	"testing"
+)
 
 var (
 	testPKey = "untrusted comment: minisign public key\nRWTAPRW2qy9FjsBiMFGCEFv9Jk3iPhAh7tZb+VOFmtmBxDyHrFT8kZuT"
@@ -71,5 +74,6 @@ func TestRoundTrip(t *testing.T) {
 	}
 	if !ok {
 		t.Fatal("signature could not be verified")
+>>>>>>> 4acd739 (Support signature creation)
 	}
 }

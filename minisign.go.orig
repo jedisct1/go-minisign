@@ -9,8 +9,12 @@ import (
 	"strings"
 	"time"
 
+<<<<<<< HEAD
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/ed25519"
+=======
+	"crypto/ed25519"
+>>>>>>> 4acd739 (Support signature creation)
 )
 
 type PrivateKey struct {
