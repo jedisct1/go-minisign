@@ -192,11 +192,11 @@ func TestSignFileStreamHashedInterop(t *testing.T) {
 	}
 	dir := t.TempDir()
 	msgPath := filepath.Join(dir, "big.bin")
-	if err := os.WriteFile(msgPath, bytes.Repeat([]byte("the quick brown fox\n"), 4096), 0644); err != nil {
+	if err := os.WriteFile(msgPath, bytes.Repeat([]byte("the quick brown fox\n"), 4096), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	pubPath := filepath.Join(dir, "pk.pub")
-	if err := os.WriteFile(pubPath, []byte(testUnencryptedPK), 0644); err != nil {
+	if err := os.WriteFile(pubPath, []byte(testUnencryptedPK), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	sig, err := sk.SignFile(msgPath, SignOptions{Hashed: true})
@@ -209,7 +209,7 @@ func TestSignFileStreamHashedInterop(t *testing.T) {
 	if !strings.Contains(sig.TrustedComment, "hashed") {
 		t.Fatalf("expected default trusted comment to include hashed marker, got %q", sig.TrustedComment)
 	}
-	if err := os.WriteFile(msgPath+".minisig", sig.Encode(), 0644); err != nil {
+	if err := os.WriteFile(msgPath+".minisig", sig.Encode(), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	out, err := exec.Command(bin, "-Vm", msgPath, "-p", pubPath).CombinedOutput()
@@ -244,7 +244,7 @@ func TestInteropMinisignCLI(t *testing.T) {
 
 	dir := t.TempDir()
 	pubPath := filepath.Join(dir, "test.pub")
-	if err := os.WriteFile(pubPath, []byte(testUnencryptedPK), 0644); err != nil {
+	if err := os.WriteFile(pubPath, []byte(testUnencryptedPK), 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -257,7 +257,7 @@ func TestInteropMinisignCLI(t *testing.T) {
 			msgPath := filepath.Join(dir, "msg-"+name+".txt")
 			sigPath := msgPath + ".minisig"
 			msg := []byte("minisign interop test " + name)
-			if err := os.WriteFile(msgPath, msg, 0644); err != nil {
+			if err := os.WriteFile(msgPath, msg, 0o644); err != nil {
 				t.Fatal(err)
 			}
 			sig, err := sk.Sign(msg, SignOptions{
@@ -268,7 +268,7 @@ func TestInteropMinisignCLI(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if err := os.WriteFile(sigPath, sig.Encode(), 0644); err != nil {
+			if err := os.WriteFile(sigPath, sig.Encode(), 0o644); err != nil {
 				t.Fatal(err)
 			}
 			out, err := exec.Command(bin, "-Vm", msgPath, "-p", pubPath).CombinedOutput()
@@ -289,15 +289,15 @@ func TestReverseInteropFromCLI(t *testing.T) {
 	dir := t.TempDir()
 	skPath := filepath.Join(dir, "sk.key")
 	pkPath := filepath.Join(dir, "pk.pub")
-	if err := os.WriteFile(skPath, []byte(testUnencryptedSK), 0600); err != nil {
+	if err := os.WriteFile(skPath, []byte(testUnencryptedSK), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(pkPath, []byte(testUnencryptedPK), 0644); err != nil {
+	if err := os.WriteFile(pkPath, []byte(testUnencryptedPK), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	msgPath := filepath.Join(dir, "msg.txt")
 	msg := []byte("signed with the cli")
-	if err := os.WriteFile(msgPath, msg, 0644); err != nil {
+	if err := os.WriteFile(msgPath, msg, 0o644); err != nil {
 		t.Fatal(err)
 	}
 	cmd := exec.Command(bin, "-S", "-s", skPath, "-m", msgPath, "-t", "from CLI")
